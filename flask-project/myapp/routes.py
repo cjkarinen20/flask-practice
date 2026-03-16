@@ -1,31 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField
-from wtforms.validators import InputRequired, Length
+from flask import render_template, redirect, url_for, request
+from myapp import app, db
+from myapp.models import Task 
+from myapp.forms import TaskForm
 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hello-world.db'
-app.config['SECRET_KEY'] = '96c2dda30278499a85e2eb8a0bbbbed9c84e79ad52114b44'
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-#---Databases---
-class Task(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable = False)
-    description = db.Column(db.String(200), nullable = True)
-    is_complete = db.Column(db.Boolean, default = False)
-    
-#---Info-Form---
-class TaskForm(FlaskForm):
-    title = StringField('Title', validators=[InputRequired(), Length(min=1, max=100)])
-    description = TextAreaField('Description', validators=[Length(max=200)])
-    is_complete = BooleanField('Completed')
-    submit = SubmitField('Submit')
-    
 @app.route('/hello/task', methods=['GET', 'POST'])
 def task():
     form = TaskForm()

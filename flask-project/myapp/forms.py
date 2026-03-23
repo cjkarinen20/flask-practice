@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import InputRequired, Length
 
 #---Info-Form---
@@ -8,4 +8,5 @@ class TaskForm(FlaskForm):
     description = TextAreaField('Description', validators=[Length(max=200)])
     is_complete = BooleanField('Completed')
     submit = SubmitField('Submit')
-    
+    priority = IntegerField('Priority', validators = [InputRequired()])
+    submit = SubmitField('Submit')

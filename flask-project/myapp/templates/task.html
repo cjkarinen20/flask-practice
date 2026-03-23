@@ -19,7 +19,14 @@
             {{form.description.label }} <br>
             {{form.description(cols=32, rows=4)}} <br>
             {% for error in form.description.errors %} 
-            <span style="color:red;">[{{ error }}] </span>
+            <span style="color:red;">[{{error}}] </span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.priority.label}}<br>
+            {{form.priority(min=0, step=1)}}<br>
+            {% for error in form.priority.errors %}
+            <span style="color:red;">[{{error}}]</span>
             {% endfor %}
         </p>
         <p>

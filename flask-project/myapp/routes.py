@@ -4,33 +4,34 @@ from myapp.models import Task
 from myapp.forms import TaskForm
 
 
-@app.route('/hello/task', methods=['GET', 'POST'])
+@app.route('/tasks', methods=['GET', 'POST'])
 def task():
     form = TaskForm()
     if form.validate_on_submit(): # Submit Button Logic
         new_task = Task(
             title = form.title.data,
             description = form.description.data,
-            is_complete = form.is_complete.data
+            is_complete = form.is_complete.data,
+            priority = form.priority.data
         )
         db.session.add(new_task)
         db.session.commit()
         return redirect(url_for('hello_world'))
     return render_template('task.html', form = form)
 
-@app.route('/task/list')
+@app.route('/tasks/list')
 def display_tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.order_by(Task.priority.desc()).all()
     return render_template('task_list.html', tasks=tasks)
 
-@app.route('/task/update_status/<int:task_id>', methods = ["POST"])
+@app.route('/tasks/update_status/<int:task_id>', methods = ["POST"])
 def update_task_status(task_id):
     task = Task.query.get_or_404(task_id)
     task.is_complete = 'is_complete' in request.form
     db.session.commit()
     return redirect(url_for('display_tasks'))
 
-@app.route('/task/delete/<int:task_id>', methods=["POST"])
+@app.route('/tasks/delete/<int:task_id>', methods=["POST"])
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
     db.session.delete(task)
